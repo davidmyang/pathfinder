@@ -1,12 +1,11 @@
 export function astar(grid, startNode, finishNode) {
+  makeWallsVisitedNodes(grid);
   const visitedNodesInOrder = [];
   startNode.distance = 0;
   const unvisitedNodes = getAllNodes(grid);
   while (!!unvisitedNodes.length) {
     sortNodesByDistance(unvisitedNodes, finishNode);
     const closestNode = unvisitedNodes.shift();
-    // If we encounter a wall, we skip it.
-    if (closestNode.isWall) continue;
     // If the closest node is at a distance of infinity,
     // we must be trapped and should therefore stop.
     if (closestNode.distance === Infinity) return visitedNodesInOrder;
@@ -65,4 +64,12 @@ export function getNodesInShortestPathOrder(finishNode) {
 function heuristic(currentNode, finishNode) {
   return (Math.abs(currentNode.row - finishNode.row) + 
           Math.abs(currentNode.col - finishNode.col));
+}
+
+function makeWallsVisitedNodes(grid) {
+  for (const row of grid) {
+    for (const node of row) {
+      if (node.isWall) node.isVisited = true;
+    }
+  }
 }
