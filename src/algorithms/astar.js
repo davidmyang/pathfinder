@@ -6,27 +6,27 @@ export function astar(grid, startNode, finishNode) {
   while (!!unvisitedNodes.length) {
     sortNodesByDistance(unvisitedNodes, finishNode);
     const closestNode = unvisitedNodes.shift();
-    // If the closest node is at a distance of infinity,
-    // we must be trapped and should therefore stop.
+    const unvisitedNeighbors = getUnvisitedNeighbors(closestNode, grid);
+
     if (closestNode.distance === Infinity) return visitedNodesInOrder;
     closestNode.isVisited = true;
     visitedNodesInOrder.push(closestNode);
     if (closestNode === finishNode) return visitedNodesInOrder;
-    updateUnvisitedNeighbors(closestNode, grid);
+
+    for (const neighbor of unvisitedNeighbors) {
+      const alt = closestNode.distance + 1;
+      if (alt < neighbor.distance) {
+          neighbor.distance = alt;
+          neighbor.previousNode = closestNode;
+      }
+    }
   }
+  return visitedNodesInOrder;
 }
 
 function sortNodesByDistance(unvisitedNodes, finishNode) {
-  unvisitedNodes.sort((nodeA, nodeB) => nodeA.distance - nodeB.distance 
+  unvisitedNodes.sort((nodeA, nodeB) => nodeA.distance - nodeB.distance
                                         + heuristic(nodeA, finishNode) - heuristic(nodeB, finishNode));
-}
-
-function updateUnvisitedNeighbors(node, grid) {
-  const unvisitedNeighbors = getUnvisitedNeighbors(node, grid);
-  for (const neighbor of unvisitedNeighbors) {
-    neighbor.distance = node.distance + 1; 
-    neighbor.previousNode = node;
-  }
 }
 
 function getUnvisitedNeighbors(node, grid) {
@@ -61,15 +61,15 @@ export function getNodesInShortestPathOrder(finishNode) {
   return nodesInShortestPathOrder;
 }
 
-function heuristic(currentNode, finishNode) {
-  return (Math.abs(currentNode.row - finishNode.row) + 
-          Math.abs(currentNode.col - finishNode.col));
-}
-
 function makeWallsVisitedNodes(grid) {
   for (const row of grid) {
     for (const node of row) {
       if (node.isWall) node.isVisited = true;
     }
   }
+}
+
+function heuristic(currentNode, finishNode) {
+  return (Math.abs(currentNode.row - finishNode.row) + 
+          Math.abs(currentNode.col - finishNode.col));
 }
