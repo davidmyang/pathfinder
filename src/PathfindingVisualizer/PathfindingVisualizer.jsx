@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import Select from 'react-dropdown-select';
 import Node from './Node/Node';
 import {dijkstra, getNodesInShortestPathOrder} from '../algorithms/dijkstra';
 import {astar} from '../algorithms/astar';
@@ -8,19 +7,13 @@ import {bfs} from '../algorithms/bfs';
 import {greedybfs} from '../algorithms/greedybfs';
 import './PathfindingVisualizer.css';
 
-const START_NODE_ROW = 10;
-const START_NODE_COL = 10;
-const FINISH_NODE_ROW = 10;
-const FINISH_NODE_COL = 35;
+const num_grid_rows = window.innerHeight/48;
+const num_grid_cols = window.innerWidth/30;
 
-const options = [
-  { value: 'dijkstra', label: 'Dijkstra\'s Algorithm' },
-  { value: 'astar', label: 'A* Algorithm' },
-  { value: 'dfs', label: 'DFS Algorithm' },
-  { value: 'bfs', label: 'BFS Algorithm' },
-  { value: 'greedybfs', label: 'Greedy BFS Algorithm' },
-];
-
+const START_NODE_ROW = Math.floor(num_grid_rows/2);
+const START_NODE_COL = Math.floor(num_grid_cols/5);
+const FINISH_NODE_ROW = Math.floor(num_grid_rows/2);
+const FINISH_NODE_COL = Math.floor(num_grid_cols/5*4);
 
 export default class PathfindingVisualizer extends Component {
   constructor() {
@@ -61,14 +54,14 @@ export default class PathfindingVisualizer extends Component {
       if (i === visitedNodesInOrder.length) {
         setTimeout(() => {
           this.animateShortestPath(nodesInShortestPathOrder);
-        }, 50 * i);
+        }, 20 * i);
         return;
       }
       setTimeout(() => {
         const node = visitedNodesInOrder[i];
         document.getElementById(`node-${node.row}-${node.col}`).className =
           'node node-visited';
-      }, 50 * i);
+      }, 20 * i);
     }
   }
 
@@ -127,45 +120,29 @@ export default class PathfindingVisualizer extends Component {
     this.animateAlgorithm(visitedNodesInOrder, nodesInShortestPathOrder);
   }
 
-  state = {
-    selectedOption: null,
-  };
-  handleChange = selectedOption => {
-    this.setState({ selectedOption });
-    
-  };
-
   render() {
     const {grid, mouseIsPressed} = this.state;
-    const { selectedOption } = this.state;
-
+  
     return (
       <>
-        <div class="style">
-          <Select
-            value={selectedOption}
-            placeholder={'Select Algorithm'}
-            onChange={this.handleChange}
-            options={options}
-          />
-        </div>
+        
         <button className="algBtn" onClick={() => this.visualizeDijkstra()}>
-          Visualize Dijkstra's Algorithm
+          Dijkstra's Algorithm
         </button>
         <button className="algBtn" onClick={() => this.visualizeAstar()}>
-          Visualize A* Algorithm
+          A* Algorithm
         </button>
         <button className="algBtn" onClick={() => this.visualizeDFS()}>
-          Visualize DFS Algorithm
+          DFS Algorithm
         </button>
         <button className="algBtn" onClick={() => this.visualizeBFS()}>
-          Visualize BFS Algorithm
+          BFS Algorithm
         </button>
         <button className="algBtn" onClick={() => this.visualizeGreedyBFS()}>
-          Visualize Greedy BFS Algorithm
+          Greedy BFS Algorithm
         </button>
 
-        <button className="algBtn" onClick={() => this.resetGrid(this.state.grid)}>
+        <button className="clearBtn" onClick={() => this.resetGrid(this.state.grid)}>
           Clear Board
         </button>
   
@@ -203,9 +180,9 @@ export default class PathfindingVisualizer extends Component {
 // Building the grid
 const getInitialGrid = () => {
   const grid = [];
-  for (let row = 0; row < 20; row++) {
+  for (let row = 0; row < num_grid_rows; row++) {
     const currentRow = [];
-    for (let col = 0; col < 40; col++) {
+    for (let col = 0; col < num_grid_cols; col++) {
       currentRow.push(createNode(col, row));
     }
     grid.push(currentRow);
@@ -230,6 +207,8 @@ const clearGrid = (grid) => {
       }
       node.isWall = false;
       node.isVisited = false;
+      node.previousNode = null;
+      node.distance = Infinity;
     }
   }
   
@@ -240,8 +219,8 @@ const createNode = (col, row) => {
   return {
     col,
     row,
-    isStart: row === START_NODE_ROW && col === START_NODE_COL,
-    isFinish: row === FINISH_NODE_ROW && col === FINISH_NODE_COL,
+    isStart: row === Math.floor(START_NODE_ROW) && col === Math.floor(START_NODE_COL),
+    isFinish: row === Math.floor(FINISH_NODE_ROW) && col === Math.floor(FINISH_NODE_COL),
     distance: Infinity,
     isVisited: false,
     isWall: false,
