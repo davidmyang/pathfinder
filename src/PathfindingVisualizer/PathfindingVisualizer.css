@@ -3,8 +3,8 @@
 }
 
 .algBtn {
-  margin: 50px;
-  padding: 15px 25px;
+  margin: 30px;
+  padding: 10px 15px;
   font-size: 24px;
   text-align: center;
   cursor: pointer;
@@ -16,12 +16,24 @@
 }
 
 .algBtn:hover {
-  background-color: rgba(17, 104, 217, 0.75);
+  background-color: rgb(12, 53, 71);
 }
 
-.style {
-  margin: 50px;
-  width: 300px;
-  color: black;
-  background-color: rgba(0, 190, 218, 0.75);
+.clearBtn {
+  margin: 30px;
+  padding: 10px 15px;
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: rgba(17, 104, 217, 0.75);
+  border: none;
+  border-radius: 10px;
 }
+
+.clearBtn:hover {
+  background-color: rgb(12, 53, 71);
+
+}
+
