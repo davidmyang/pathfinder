@@ -16,7 +16,7 @@
 }
 
 .algBtn:hover {
-  background-color: rgb(12, 53, 71);
+  background-color: rgba(17, 104, 217, 0.75);
 }
 
 .clearBtn {
@@ -27,13 +27,12 @@
   cursor: pointer;
   outline: none;
   color: #fff;
-  background-color: rgba(17, 104, 217, 0.75);
+  background-color: rgb(12, 53, 71);
   border: none;
   border-radius: 10px;
 }
 
 .clearBtn:hover {
-  background-color: rgb(12, 53, 71);
-
+  background-color: rgba(17, 104, 217, 0.75);
 }
 
