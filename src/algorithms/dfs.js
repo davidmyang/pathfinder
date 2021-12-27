@@ -9,15 +9,13 @@ export function dfs(grid, startNode, finishNode) {
     visitedNodesInOrder.push(currentNode);
     currentNode.isVisited = true;
     const unvisitedNeighbors = getUnvisitedNeighbors(currentNode, grid);
+
+    if (currentNode === finishNode) return visitedNodesInOrder;
    
     for (const neighbor of unvisitedNeighbors) {
-      neighbor.previousNode = currentNode;
-      if (neighbor === finishNode) {
-        return visitedNodesInOrder;
-      }
-      else {
+        neighbor.previousNode = currentNode;
         unvisitedNodes.push(neighbor);
-      }
+      
     }
   }
 
